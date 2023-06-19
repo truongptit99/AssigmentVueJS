@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: grid;
+            place-items: center;
+        }
+
+        .text-red {
+            color: red;
+        }
+
+        .text-green {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <p>
+            <input type="text" v-model="greeting">
+        </p>
+        <p>
+            {{ greeting }} ({{ greeting.length }})
+        </p>
+        <button :class="active ? 'text-red' : 'text-green'" @click="toggle">Click Me</button>
+        <section v-show="inProgressAssignments.length">
+            <h2>In progress</h2>
+            <ul>
+                <li v-for="assignment in inProgressAssignments" :key="assignment.id">
+                    <label>
+                        {{ assignment.name }}
+                        <input type="checkbox" v-model="assignment.complete">
+                    </label>
+                </li>
+            </ul>
+        </section>
+        <section v-show="completedAssignments.length" class="mt-3">
+            <h2>Completed</h2>
+            <ul>
+                <li v-for="assignment in completedAssignments" :key="assignment.id">
+                    <label>
+                        {{ assignment.name }}
+                        <input type="checkbox" v-model="assignment.complete">
+                    </label>
+                </li>
+            </ul>
+        </section>
+    </div>
+    <script>
+        let app = {
+            data() {
+                return {
+                    greeting: 'Hello World',
+                    buttonClasses: 'text-green',
+                    active: false,
+                    assignments: [
+                        { name: 'Finish project', complete: false, id: 1 },
+                        { name: 'Read Chapter 4', complete: false, id: 2 },
+                        { name: 'Turn in Homework', complete: false, id: 3 },
+                    ]
+                }
+            },
+            mounted() {
+                setTimeout(() => {
+                    this.greeting = 'Changed'
+                }, 3000);
+            },
+            computed: {
+                inProgressAssignments() {
+                    return this.assignments.filter(assignment => !assignment.complete);
+                },
+                completedAssignments() {
+                    return this.assignments.filter(assignment => assignment.complete);
+                }
+            },
+            methods: {
+                toggle() {
+                    this.active = !this.active;
+                }
+            },
+        }
+        Vue.createApp(app).mount('#app');
+    </script>
+</body>
+</html>
