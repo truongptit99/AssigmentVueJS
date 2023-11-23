@@ -9,10 +9,18 @@ export default {
     template:
     /* html */
     `
-        <section class="space-y-6">
-            <assignment-list :assignments="filters.inProgress" title="In progress"></assignment-list>
-            <assignment-list :assignments="filters.completed" title="Completed"></assignment-list>
-            <assignment-create :assignments="assignments" @add="add"></assignment-create>            
+        <section class="flex gap-8">
+            <assignment-list :assignments="filters.inProgress" title="In progress">
+                <assignment-create :assignments="assignments" @add="addNew"></assignment-create>
+            </assignment-list>
+            <div v-show="showCompleted">
+                <assignment-list
+                    :assignments="filters.completed"
+                    title="Completed"
+                    can-toggle
+                    @toggle="showCompleted = !showCompleted"
+                ></assignment-list>            
+            </div>
         </section>
     `,
     data() {
@@ -21,10 +29,11 @@ export default {
             buttonClasses: 'text-green',
             active: false,
             assignments: [
-                { name: 'Finish project', complete: false, id: 1 },
-                { name: 'Read Chapter 4', complete: false, id: 2 },
-                { name: 'Turn in Homework', complete: false, id: 3 },
+                // { name: 'Finish project', complete: false, id: 1, tag: 'math' },
+                // { name: 'Read Chapter 4', complete: false, id: 2, tag: 'science' },
+                // { name: 'Turn in Homework', complete: false, id: 3, tag: 'math' },
             ],
+            showCompleted: true
         }
     },
     computed: {
@@ -41,12 +50,20 @@ export default {
             }
         }
     },
+    created() {
+        fetch('http://localhost:3001/assignments')
+            .then(response => response.json())
+            .then(assignments => {
+                this.assignments = assignments;
+            })
+    },
     methods: {
-        add(name) {
+        addNew(name) {
             this.assignments.push({
                 name: name,
                 completed: false,
-                id: this.assignments.length + 1
+                id: this.assignments.length + 1,
+                tag: 'new'
             });
         }
     }
