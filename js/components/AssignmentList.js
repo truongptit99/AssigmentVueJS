@@ -1,15 +1,18 @@
 import Assignment from "./Assignment.js";
 import AssignmentTags from "./AssignmentTags.js";
+import Panel from "./Panel.js";
 
 export default {
     components: {
-        Assignment, AssignmentTags
+        Assignment,
+        AssignmentTags,
+        Panel
     },
     template: 
     /* html */
     `
-        <section v-show="show && assignments.length" class="w-60">
-            <div class="flex justify-between">
+        <Panel v-show="show && assignments.length" class="w-60">
+            <div class="flex justify-between items-start">
                 <h2 class="font-bold mb-2">
                     {{ title }}
                     <span>({{ filteredAssignments.length }})</span>
@@ -25,7 +28,11 @@ export default {
             </ul>
 
             <slot></slot>
-        </section>
+
+            <template #footer>
+                My footer goes here.
+            </template>
+        </Panel>
     `,
     props: {
         assignments: Array,

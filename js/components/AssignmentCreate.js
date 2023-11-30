@@ -2,10 +2,10 @@ export default {
     template:
     /* html */
     `
-        <form @submit.prevent="add">
+        <form @submit.prevent="addEvent">
             <div class="border border-gray-600 text-black flex">
-                <input placeholder="New assignment..." class="p-2" v-model="newAssignment"/>
-                <button type="submit" class="bg-white p-2 border-l">Add</button>
+                <input placeholder="New assignment..." class="p-2 w-4/5" v-model="newAssignment"/>
+                <button type="submit" class="bg-white p-2 border-l w-1/5">Add</button>
             </div>
         </form>
     `,
@@ -18,8 +18,8 @@ export default {
         assignments: Array
     },
     methods: {
-        add() {
-            this.$emit('add', this.newAssignment);
+        addEvent() {
+            this.$emit('addAssign', this.newAssignment);
             this.newAssignment = '';
         }
     }

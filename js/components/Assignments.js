@@ -11,7 +11,7 @@ export default {
     `
         <section class="flex gap-8">
             <assignment-list :assignments="filters.inProgress" title="In progress">
-                <assignment-create :assignments="assignments" @add="addNew"></assignment-create>
+                <assignment-create :assignments="assignments" @addAssign="addNew"></assignment-create>
             </assignment-list>
             <div v-show="showCompleted">
                 <assignment-list
@@ -59,12 +59,31 @@ export default {
     },
     methods: {
         addNew(name) {
-            this.assignments.push({
-                name: name,
-                completed: false,
-                id: this.assignments.length + 1,
-                tag: 'new'
-            });
+            // this.assignments.push({
+            //     name: name,
+            //     completed: false,
+            //     id: this.assignments.length + 1,
+            //     tag: 'new'
+            // });
+
+            let options = {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    completed: false,
+                    id: this.assignments.length + 1,
+                    tag: 'new'
+                })
+            }
+
+            fetch('http://localhost:3001/assignments', options)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                });
         }
     }
 }
